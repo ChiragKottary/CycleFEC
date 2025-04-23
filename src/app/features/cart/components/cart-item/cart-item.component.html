@@ -1,22 +1,38 @@
-<div class="flex items-center space-x-4">
-    <img [src]="item.imageUrl" [alt]="item.name" class="w-24 h-24 object-cover rounded-lg">
-    <div class="flex-grow">
-        <h3 class="text-lg font-semibold">{{ item.name }}</h3>
-        <p class="text-gray-600" *ngIf="item.size">Size: {{ item.size }}</p>
-        <p class="text-gray-600" *ngIf="item.specifications">
-            {{ item.specifications.join(', ') }}
-        </p>
-        <p class="text-lg font-bold">${{ item.price }}</p>
+<div class="flex items-center gap-4 py-4 border-b border-[#e7eef3]">
+  <img [src]="item.imageUrl" alt="Product image" class="w-24 h-24 object-cover rounded-xl">
+  <div class="flex flex-1 justify-between items-start">
+    <div class="flex flex-col gap-1">
+      <h3 class="text-[#0d161b] text-lg font-medium leading-normal">{{ item.name }}</h3>
+      <p class="text-[#4c7b9a] text-sm" *ngIf="item.brand">Brand: {{ item.brand }}</p>
+      <p class="text-[#4c7b9a] text-sm" *ngIf="item.cycleType">Type: {{ item.cycleType }}</p>
+      <p class="text-[#4c7b9a] text-base font-medium">${{ item.price }}</p>
     </div>
-    <div class="flex items-center space-x-2">
-        <button (click)="updateQuantity(-1)" class="px-2 py-1 bg-gray-200 rounded">-</button>
+    <div class="flex items-center gap-4">
+      <div class="flex items-center gap-2">
+        <button 
+          (click)="updateQuantity(item.quantity - 1)"
+          class="w-8 h-8 flex items-center justify-center rounded-full bg-[#e7eef3] hover:bg-[#d1dce6] transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>
+          </svg>
+        </button>
         <span class="w-8 text-center">{{ item.quantity }}</span>
-        <button (click)="updateQuantity(1)" class="px-2 py-1 bg-gray-200 rounded">+</button>
-    </div>
-    <button (click)="removeItem()" class="text-red-500 hover:text-red-700">
-        <span class="sr-only">Remove item</span>
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        <button 
+          (click)="updateQuantity(item.quantity + 1)"
+          class="w-8 h-8 flex items-center justify-center rounded-full bg-[#e7eef3] hover:bg-[#d1dce6] transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+          </svg>
+        </button>
+      </div>
+      <button 
+        (click)="removeItem()"
+        class="w-8 h-8 flex items-center justify-center rounded-full text-red-500 hover:bg-red-50 transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+          <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
         </svg>
-    </button>
+      </button>
+    </div>
+  </div>
 </div>

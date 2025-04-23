@@ -1,11 +1,13 @@
-export interface CartItem {
-  id: number;
+import { IBrand, ICart, ICartItem, ICycle, ICycleType } from '../../../app.model';
+
+export interface CartItemDisplay {
+  id: string;
   name: string;
   price: number;
   quantity: number;
-  size?: string;
-  specifications?: string[];
   imageUrl: string;
+  brand?: string;
+  cycleType?: string;
 }
 
 export interface OrderSummary {

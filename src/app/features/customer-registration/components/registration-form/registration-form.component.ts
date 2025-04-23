@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { CustomerService } from '../../services/customer.service';
 
 @Component({
   selector: 'app-registration-form',
@@ -12,13 +13,19 @@ import { Router } from '@angular/router';
 })
 export class RegistrationFormComponent {
   registrationForm: FormGroup;
+  isSubmitting = false;
+  errorMessage = '';
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(
+    private fb: FormBuilder, 
+    private router: Router,
+    private customerService: CustomerService
+  ) {
     this.registrationForm = this.fb.group({
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
-      phoneNumber: ['', [Validators.required]],
+      phone: ['', [Validators.required]],
       address: ['', [Validators.required]],
       city: ['', [Validators.required]],
       state: ['', [Validators.required]],
@@ -30,8 +37,23 @@ export class RegistrationFormComponent {
 
   onSubmit() {
     if (this.registrationForm.valid) {
-      console.log(this.registrationForm.value);
-      // TODO: Implement registration logic
+      this.isSubmitting = true;
+      this.errorMessage = '';
+      
+      const formValue = this.registrationForm.value;
+      // Remove termsAccepted as it's not needed in the API
+      const { termsAccepted, ...customerData } = formValue;
+
+      this.customerService.registerCustomer(customerData).subscribe({
+        next: () => {
+          // Registration successful
+          this.router.navigate(['/login']);
+        },
+        error: (error) => {
+          this.isSubmitting = false;
+          this.errorMessage = error.error?.message || 'Registration failed. Please try again.';
+        }
+      });
     }
   }
 

@@ -1,88 +1,160 @@
-<form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="flex flex-col w-[512px] max-w-[512px] py-5 flex-1">
-  <div class="flex flex-wrap gap-2 p-4">
-    <span class="text-[#0d161b] text-base font-medium leading-normal">Create Account</span>
+<!-- Registration Form -->
+<form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="w-full max-w-lg mx-auto p-6 bg-white rounded-xl shadow-sm">
+  <div class="flex flex-wrap -mx-3 mb-6">
+    <!-- First Name -->
+    <div class="w-full md:w-1/2 px-3 mb-6">
+      <label class="block text-[#0d161b] text-sm font-medium mb-2" for="firstName">
+        First Name
+      </label>
+      <input 
+        class="w-full px-3 py-2 border border-[#cfdee7] rounded-xl focus:outline-none focus:border-[#209cee]"
+        id="firstName"
+        type="text"
+        formControlName="firstName"
+        [class.border-red-500]="registrationForm.get('firstName')?.invalid && registrationForm.get('firstName')?.touched"
+      >
+    </div>
+    <!-- Last Name -->
+    <div class="w-full md:w-1/2 px-3 mb-6">
+      <label class="block text-[#0d161b] text-sm font-medium mb-2" for="lastName">
+        Last Name
+      </label>
+      <input 
+        class="w-full px-3 py-2 border border-[#cfdee7] rounded-xl focus:outline-none focus:border-[#209cee]"
+        id="lastName"
+        type="text"
+        formControlName="lastName"
+        [class.border-red-500]="registrationForm.get('lastName')?.invalid && registrationForm.get('lastName')?.touched"
+      >
+    </div>
+    <!-- Email -->
+    <div class="w-full px-3 mb-6">
+      <label class="block text-[#0d161b] text-sm font-medium mb-2" for="email">
+        Email
+      </label>
+      <input 
+        class="w-full px-3 py-2 border border-[#cfdee7] rounded-xl focus:outline-none focus:border-[#209cee]"
+        id="email"
+        type="email"
+        formControlName="email"
+        [class.border-red-500]="registrationForm.get('email')?.invalid && registrationForm.get('email')?.touched"
+      >
+    </div>
+    <!-- Phone -->
+    <div class="w-full px-3 mb-6">
+      <label class="block text-[#0d161b] text-sm font-medium mb-2" for="phone">
+        Phone Number
+      </label>
+      <input 
+        class="w-full px-3 py-2 border border-[#cfdee7] rounded-xl focus:outline-none focus:border-[#209cee]"
+        id="phone"
+        type="tel"
+        formControlName="phone"
+        [class.border-red-500]="registrationForm.get('phone')?.invalid && registrationForm.get('phone')?.touched"
+      >
+    </div>
+    <!-- Address -->
+    <div class="w-full px-3 mb-6">
+      <label class="block text-[#0d161b] text-sm font-medium mb-2" for="address">
+        Address
+      </label>
+      <input 
+        class="w-full px-3 py-2 border border-[#cfdee7] rounded-xl focus:outline-none focus:border-[#209cee]"
+        id="address"
+        type="text"
+        formControlName="address"
+        [class.border-red-500]="registrationForm.get('address')?.invalid && registrationForm.get('address')?.touched"
+      >
+    </div>
+    <!-- City -->
+    <div class="w-full md:w-1/3 px-3 mb-6">
+      <label class="block text-[#0d161b] text-sm font-medium mb-2" for="city">
+        City
+      </label>
+      <input 
+        class="w-full px-3 py-2 border border-[#cfdee7] rounded-xl focus:outline-none focus:border-[#209cee]"
+        id="city"
+        type="text"
+        formControlName="city"
+        [class.border-red-500]="registrationForm.get('city')?.invalid && registrationForm.get('city')?.touched"
+      >
+    </div>
+    <!-- State -->
+    <div class="w-full md:w-1/3 px-3 mb-6">
+      <label class="block text-[#0d161b] text-sm font-medium mb-2" for="state">
+        State
+      </label>
+      <input 
+        class="w-full px-3 py-2 border border-[#cfdee7] rounded-xl focus:outline-none focus:border-[#209cee]"
+        id="state"
+        type="text"
+        formControlName="state"
+        [class.border-red-500]="registrationForm.get('state')?.invalid && registrationForm.get('state')?.touched"
+      >
+    </div>
+    <!-- Postal Code -->
+    <div class="w-full md:w-1/3 px-3 mb-6">
+      <label class="block text-[#0d161b] text-sm font-medium mb-2" for="postalCode">
+        Postal Code
+      </label>
+      <input 
+        class="w-full px-3 py-2 border border-[#cfdee7] rounded-xl focus:outline-none focus:border-[#209cee]"
+        id="postalCode"
+        type="text"
+        formControlName="postalCode"
+        [class.border-red-500]="registrationForm.get('postalCode')?.invalid && registrationForm.get('postalCode')?.touched"
+      >
+    </div>
+    <!-- Password -->
+    <div class="w-full px-3 mb-6">
+      <label class="block text-[#0d161b] text-sm font-medium mb-2" for="password">
+        Password
+      </label>
+      <input 
+        class="w-full px-3 py-2 border border-[#cfdee7] rounded-xl focus:outline-none focus:border-[#209cee]"
+        id="password"
+        type="password"
+        formControlName="password"
+        [class.border-red-500]="registrationForm.get('password')?.invalid && registrationForm.get('password')?.touched"
+      >
+    </div>
+    <!-- Terms Acceptance -->
+    <div class="w-full px-3 mb-6">
+      <label class="flex items-center">
+        <input 
+          type="checkbox" 
+          formControlName="termsAccepted"
+          class="form-checkbox h-4 w-4 text-[#209cee] border-[#cfdee7] rounded focus:ring-[#209cee]"
+        >
+        <span class="ml-2 text-sm text-[#0d161b]">I accept the terms and conditions</span>
+      </label>
+    </div>
   </div>
 
-  <!-- Name fields -->
-  <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
-    <label class="flex flex-col min-w-40 flex-1">
-      <input formControlName="firstName" placeholder="First Name" 
-        class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#0d161b] focus:outline-0 focus:ring-0 border border-[#cfdee7] bg-slate-50 focus:border-[#cfdee7] h-14 placeholder:text-[#4c7b9a] p-[15px] text-base font-normal leading-normal" />
-    </label>
-    <label class="flex flex-col min-w-40 flex-1">
-      <input formControlName="lastName" placeholder="Last Name"
-        class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#0d161b] focus:outline-0 focus:ring-0 border border-[#cfdee7] bg-slate-50 focus:border-[#cfdee7] h-14 placeholder:text-[#4c7b9a] p-[15px] text-base font-normal leading-normal" />
-    </label>
-  </div>
-
-  <!-- Email field -->
-  <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
-    <label class="flex flex-col min-w-40 flex-1">
-      <input formControlName="email" placeholder="Email Address" type="email"
-        class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#0d161b] focus:outline-0 focus:ring-0 border border-[#cfdee7] bg-slate-50 focus:border-[#cfdee7] h-14 placeholder:text-[#4c7b9a] p-[15px] text-base font-normal leading-normal" />
-    </label>
-  </div>
-
-  <!-- Phone field -->
-  <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
-    <label class="flex flex-col min-w-40 flex-1">
-      <input formControlName="phoneNumber" placeholder="Phone Number" type="tel"
-        class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#0d161b] focus:outline-0 focus:ring-0 border border-[#cfdee7] bg-slate-50 focus:border-[#cfdee7] h-14 placeholder:text-[#4c7b9a] p-[15px] text-base font-normal leading-normal" />
-    </label>
-  </div>
-
-  <!-- Address field -->
-  <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
-    <label class="flex flex-col min-w-40 flex-1">
-      <input formControlName="address" placeholder="Address"
-        class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#0d161b] focus:outline-0 focus:ring-0 border border-[#cfdee7] bg-slate-50 focus:border-[#cfdee7] h-14 placeholder:text-[#4c7b9a] p-[15px] text-base font-normal leading-normal" />
-    </label>
-  </div>
-
-  <!-- City and State fields -->
-  <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
-    <label class="flex flex-col min-w-40 flex-1">
-      <input formControlName="city" placeholder="City"
-        class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#0d161b] focus:outline-0 focus:ring-0 border border-[#cfdee7] bg-slate-50 focus:border-[#cfdee7] h-14 placeholder:text-[#4c7b9a] p-[15px] text-base font-normal leading-normal" />
-    </label>
-    <label class="flex flex-col min-w-40 flex-1">
-      <input formControlName="state" placeholder="State"
-        class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#0d161b] focus:outline-0 focus:ring-0 border border-[#cfdee7] bg-slate-50 focus:border-[#cfdee7] h-14 placeholder:text-[#4c7b9a] p-[15px] text-base font-normal leading-normal" />
-    </label>
-  </div>
-
-  <!-- Postal Code and Password fields -->
-  <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
-    <label class="flex flex-col min-w-40 flex-1">
-      <input formControlName="postalCode" placeholder="Postal Code"
-        class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#0d161b] focus:outline-0 focus:ring-0 border border-[#cfdee7] bg-slate-50 focus:border-[#cfdee7] h-14 placeholder:text-[#4c7b9a] p-[15px] text-base font-normal leading-normal" />
-    </label>
-    <label class="flex flex-col min-w-40 flex-1">
-      <input formControlName="password" placeholder="Password" type="password"
-        class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#0d161b] focus:outline-0 focus:ring-0 border border-[#cfdee7] bg-slate-50 focus:border-[#cfdee7] h-14 placeholder:text-[#4c7b9a] p-[15px] text-base font-normal leading-normal" />
-    </label>
-  </div>
-
-  <!-- Terms and Conditions -->
-  <div class="px-4">
-    <label class="flex gap-x-3 py-3 flex-row">
-      <input type="checkbox" formControlName="termsAccepted"
-        class="h-5 w-5 rounded border-[#cfdee7] border-2 bg-transparent text-[#209cee] checked:bg-[#209cee] checked:border-[#209cee] checked:bg-[image:--checkbox-tick-svg] focus:ring-0 focus:ring-offset-0 focus:border-[#cfdee7] focus:outline-none" />
-      <p class="text-[#0d161b] text-base font-normal leading-normal">I agree to the Terms of Service and Privacy Policy</p>
-    </label>
+  <!-- Error Message -->
+  <div *ngIf="errorMessage" class="px-3 mb-6">
+    <p class="text-red-500 text-sm">{{ errorMessage }}</p>
   </div>
 
   <!-- Submit Button -->
-  <div class="flex px-4 py-3 justify-center">
-    <button type="submit"
-      class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-5 bg-[#209cee] text-slate-50 text-base font-bold leading-normal tracking-[0.015em]">
-      <span class="truncate">Create Account</span>
+  <div class="flex items-center justify-between px-3">
+    <button 
+      type="submit" 
+      [disabled]="registrationForm.invalid || isSubmitting"
+      class="bg-[#209cee] hover:bg-[#1a7fbf] text-white font-medium py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center min-w-32"
+    >
+      <svg *ngIf="isSubmitting" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+      {{ isSubmitting ? 'Registering...' : 'Register' }}
+    </button>
+    <button 
+      type="button" 
+      (click)="navigateToLogin()"
+      class="text-[#4c7b9a] hover:text-[#0d161b] font-medium"
+    >
+      Already have an account?
     </button>
   </div>
-
-  <!-- Login Link -->
-  <p class="text-[#4c7b9a] text-sm font-normal leading-normal pb-3 pt-1 px-4 text-center">
-    Already have an account? 
-    <span class="underline cursor-pointer" (click)="navigateToLogin()">Log in</span>
-  </p>
 </form>

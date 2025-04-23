@@ -1,19 +1,25 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login-form',
   templateUrl: './login-form.component.html',
-//   styleUrl: './login-form.component.scss',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule]
 })
 export class LoginFormComponent {
   loginForm: FormGroup;
+  isSubmitting = false;
+  errorMessage = '';
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private authService: AuthService
+  ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]]
@@ -22,8 +28,18 @@ export class LoginFormComponent {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      console.log(this.loginForm.value);
-      // TODO: Implement login logic
+      this.isSubmitting = true;
+      this.errorMessage = '';
+
+      this.authService.login(this.loginForm.value).subscribe({
+        next: () => {
+          this.router.navigate(['/products']);
+        },
+        error: (error) => {
+          this.isSubmitting = false;
+          this.errorMessage = error.error?.message || 'Login failed. Please check your credentials.';
+        }
+      });
     }
   }
 

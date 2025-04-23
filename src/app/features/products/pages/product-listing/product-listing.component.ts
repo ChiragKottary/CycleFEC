@@ -1,74 +1,141 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { CartService } from '../../../cart/services/cart.service';
-import { Observable, map } from 'rxjs';
-import { HeaderComponent } from "../../../../shared/components/header/header.component";
+import { ProductService } from '../../services/product.service';
+import { Observable, Subject, map } from 'rxjs';
+import { ProductFilter, PagedResponse } from '../../models/product.model';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { ICycle } from '../../../../app.model';
 
 @Component({
   selector: 'app-product-listing',
   templateUrl: './product-listing.component.html',
   styleUrl: './product-listing.component.scss',
   standalone: true,
-  imports: [CommonModule, RouterModule, HeaderComponent]
+  imports: [CommonModule, RouterModule, FormsModule]
 })
-export class ProductListingComponent {
+export class ProductListingComponent implements OnInit {
+  products: ICycle[] = [];
   cartItemCount$: Observable<number>;
+  loading = false;
+  error = '';
 
-  products = [
-    {
-      id: 1,
-      name: 'Trail Blazer Mountain Bike',
-      price: 599,
-      image: 'https://cdn.usegalileo.ai/sdxl10/25518d5d-3602-4afd-99d0-13fb0f147701.png'
-    },
-    {
-      id: 2,
-      name: 'City Cruiser Comfort Cycle',
-      price: 349,
-      image: 'https://cdn.usegalileo.ai/sdxl10/6745f67e-7b20-4981-a46d-8b6d79b6befe.png'
-    },
-    {
-      id: 3,
-      name: 'Velocity Road Racer',
-      price: 799,
-      image: 'https://cdn.usegalileo.ai/sdxl10/e1e0d1e9-9af3-461a-8755-75fb9fee148c.png'
-    },
-    {
-      id: 4,
-      name: 'Electric Glide E-Bike',
-      price: 1299,
-      image: 'https://cdn.usegalileo.ai/sdxl10/f8fed6f5-a7c9-4728-b9e0-c180f95f4b80.png'
-    },
-    {
-      id: 5,
-      name: 'Urban Commuter Hybrid',
-      price: 449,
-      image: 'https://cdn.usegalileo.ai/sdxl10/e543683d-e3f8-4a69-b581-5d58c7574e2a.png'
-    },
-    {
-      id: 6,
-      name: 'Adventure Touring Bike',
-      price: 649,
-      image: 'https://cdn.usegalileo.ai/sdxl10/aa714316-3958-4991-9882-1d5a1c85ef24.png'
-    }
-  ];
+  // Filter state
+  filter: ProductFilter = {
+    page: 1,
+    pageSize: 7,
+    minPrice: 2000,
+    maxPrice: 12000,
+    isActive: true,
+    sortBy: 'modelName',
+    sortDirection: 1
+  };
 
-  categories = ['New Arrivals', 'Electric Bikes', 'Mountain Bikes', 'Road Bikes', 'Accessories'];
+  // Pagination
+  totalItems = 0;
+  totalPages = 0;
 
-  constructor(private cartService: CartService) {
+  // UI state
+  gridSize: 'small' | 'medium' | 'large' = 'medium';
+  searchTerms = new Subject<string>();
+
+  constructor(
+    private cartService: CartService,
+    private productService: ProductService
+  ) {
     this.cartItemCount$ = this.cartService.getCartItems().pipe(
       map(items => items.reduce((total, item) => total + item.quantity, 0))
     );
+
+    // Setup search with debounce
+    this.searchTerms.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap(term => {
+        this.filter = { ...this.filter, searchTerm: term, page: 1 };
+        return this.loadProducts();
+      })
+    ).subscribe();
   }
 
-  addToCart(product: any): void {
-    this.cartService.addToCart({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      quantity: 1,
-      imageUrl: product.image
-    });
+  ngOnInit() {
+    this.loadProducts().subscribe();
+  }
+
+  search(term: string) {
+    this.searchTerms.next(term);
+  }
+
+  updatePriceRange(min: number, max: number) {
+    this.filter = { ...this.filter, minPrice: min, maxPrice: max, page: 1 };
+    this.loadProducts().subscribe();
+  }
+
+  setGridSize(size: 'small' | 'medium' | 'large') {
+    this.gridSize = size;
+  }
+
+  getGridClass(): string {
+    switch(this.gridSize) {
+      case 'small': return 'grid-cols-[repeat(auto-fit,minmax(158px,1fr))]';
+      case 'medium': return 'grid-cols-[repeat(auto-fit,minmax(200px,1fr))]';
+      case 'large': return 'grid-cols-[repeat(auto-fit,minmax(250px,1fr))]';
+      default: return 'grid-cols-[repeat(auto-fit,minmax(200px,1fr))]';
+    }
+  }
+
+  // Pagination methods
+  getPaginationRange(): number[] {
+    const range: number[] = [];
+    const maxVisiblePages = 5;
+    let start = Math.max(1, this.filter.page - Math.floor(maxVisiblePages / 2));
+    let end = Math.min(this.totalPages, start + maxVisiblePages - 1);
+
+    if (end - start + 1 < maxVisiblePages) {
+      start = Math.max(1, end - maxVisiblePages + 1);
+    }
+
+    for (let i = start; i <= end; i++) {
+      range.push(i);
+    }
+    return range;
+  }
+
+  onPageChange(page: number) {
+    if (page < 1 || page > this.totalPages || page === this.filter.page) return;
+    this.filter = { ...this.filter, page };
+    this.loadProducts().subscribe();
+  }
+
+  onSortChange(sortBy: string) {
+    this.filter = { 
+      ...this.filter, 
+      sortBy,
+      sortDirection: this.filter.sortBy === sortBy ? 
+        (this.filter.sortDirection === 1 ? -1 : 1) : 1,
+      page: 1
+    };
+    this.loadProducts().subscribe();
+  }
+
+  private loadProducts(): Observable<PagedResponse<ICycle>> {
+    this.loading = true;
+    this.error = '';
+
+    return this.productService.getProducts(this.filter).pipe(
+      map(response => {
+        this.products = response.items;
+        this.totalItems = response.totalItems;
+        this.totalPages = response.totalPages;
+        this.loading = false;
+        return response;
+      })
+    );
+  }
+
+  addToCart(product: ICycle): void {
+    this.cartService.addToCart(product);
   }
 }

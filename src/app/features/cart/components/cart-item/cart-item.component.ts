@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CartItem } from '../../models/cart.model';
+import { CartService } from '../../services/cart.service';
+import { CartItemDisplay } from '../../models/cart.model';
 
 @Component({
   selector: 'app-cart-item',
@@ -9,16 +10,17 @@ import { CartItem } from '../../models/cart.model';
   imports: [CommonModule]
 })
 export class CartItemComponent {
-  @Input() item!: CartItem;
-  @Output() quantityChange = new EventEmitter<number>();
-  @Output() remove = new EventEmitter<void>();
+  @Input() item!: CartItemDisplay;
 
-  updateQuantity(change: number): void {
-    const newQuantity = Math.max(1, this.item.quantity + change);
-    this.quantityChange.emit(newQuantity);
+  constructor(private cartService: CartService) {}
+
+  updateQuantity(quantity: number): void {
+    if (quantity > 0) {
+      this.cartService.updateQuantity(this.item.id, quantity);
+    }
   }
 
   removeItem(): void {
-    this.remove.emit();
+    this.cartService.removeItem(this.item.id);
   }
 }
