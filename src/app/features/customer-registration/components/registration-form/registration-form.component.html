@@ -1,0 +1,88 @@
+<form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="flex flex-col w-[512px] max-w-[512px] py-5 flex-1">
+  <div class="flex flex-wrap gap-2 p-4">
+    <span class="text-[#0d161b] text-base font-medium leading-normal">Create Account</span>
+  </div>
+
+  <!-- Name fields -->
+  <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+    <label class="flex flex-col min-w-40 flex-1">
+      <input formControlName="firstName" placeholder="First Name" 
+        class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#0d161b] focus:outline-0 focus:ring-0 border border-[#cfdee7] bg-slate-50 focus:border-[#cfdee7] h-14 placeholder:text-[#4c7b9a] p-[15px] text-base font-normal leading-normal" />
+    </label>
+    <label class="flex flex-col min-w-40 flex-1">
+      <input formControlName="lastName" placeholder="Last Name"
+        class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#0d161b] focus:outline-0 focus:ring-0 border border-[#cfdee7] bg-slate-50 focus:border-[#cfdee7] h-14 placeholder:text-[#4c7b9a] p-[15px] text-base font-normal leading-normal" />
+    </label>
+  </div>
+
+  <!-- Email field -->
+  <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+    <label class="flex flex-col min-w-40 flex-1">
+      <input formControlName="email" placeholder="Email Address" type="email"
+        class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#0d161b] focus:outline-0 focus:ring-0 border border-[#cfdee7] bg-slate-50 focus:border-[#cfdee7] h-14 placeholder:text-[#4c7b9a] p-[15px] text-base font-normal leading-normal" />
+    </label>
+  </div>
+
+  <!-- Phone field -->
+  <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+    <label class="flex flex-col min-w-40 flex-1">
+      <input formControlName="phoneNumber" placeholder="Phone Number" type="tel"
+        class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#0d161b] focus:outline-0 focus:ring-0 border border-[#cfdee7] bg-slate-50 focus:border-[#cfdee7] h-14 placeholder:text-[#4c7b9a] p-[15px] text-base font-normal leading-normal" />
+    </label>
+  </div>
+
+  <!-- Address field -->
+  <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+    <label class="flex flex-col min-w-40 flex-1">
+      <input formControlName="address" placeholder="Address"
+        class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#0d161b] focus:outline-0 focus:ring-0 border border-[#cfdee7] bg-slate-50 focus:border-[#cfdee7] h-14 placeholder:text-[#4c7b9a] p-[15px] text-base font-normal leading-normal" />
+    </label>
+  </div>
+
+  <!-- City and State fields -->
+  <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+    <label class="flex flex-col min-w-40 flex-1">
+      <input formControlName="city" placeholder="City"
+        class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#0d161b] focus:outline-0 focus:ring-0 border border-[#cfdee7] bg-slate-50 focus:border-[#cfdee7] h-14 placeholder:text-[#4c7b9a] p-[15px] text-base font-normal leading-normal" />
+    </label>
+    <label class="flex flex-col min-w-40 flex-1">
+      <input formControlName="state" placeholder="State"
+        class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#0d161b] focus:outline-0 focus:ring-0 border border-[#cfdee7] bg-slate-50 focus:border-[#cfdee7] h-14 placeholder:text-[#4c7b9a] p-[15px] text-base font-normal leading-normal" />
+    </label>
+  </div>
+
+  <!-- Postal Code and Password fields -->
+  <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+    <label class="flex flex-col min-w-40 flex-1">
+      <input formControlName="postalCode" placeholder="Postal Code"
+        class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#0d161b] focus:outline-0 focus:ring-0 border border-[#cfdee7] bg-slate-50 focus:border-[#cfdee7] h-14 placeholder:text-[#4c7b9a] p-[15px] text-base font-normal leading-normal" />
+    </label>
+    <label class="flex flex-col min-w-40 flex-1">
+      <input formControlName="password" placeholder="Password" type="password"
+        class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#0d161b] focus:outline-0 focus:ring-0 border border-[#cfdee7] bg-slate-50 focus:border-[#cfdee7] h-14 placeholder:text-[#4c7b9a] p-[15px] text-base font-normal leading-normal" />
+    </label>
+  </div>
+
+  <!-- Terms and Conditions -->
+  <div class="px-4">
+    <label class="flex gap-x-3 py-3 flex-row">
+      <input type="checkbox" formControlName="termsAccepted"
+        class="h-5 w-5 rounded border-[#cfdee7] border-2 bg-transparent text-[#209cee] checked:bg-[#209cee] checked:border-[#209cee] checked:bg-[image:--checkbox-tick-svg] focus:ring-0 focus:ring-offset-0 focus:border-[#cfdee7] focus:outline-none" />
+      <p class="text-[#0d161b] text-base font-normal leading-normal">I agree to the Terms of Service and Privacy Policy</p>
+    </label>
+  </div>
+
+  <!-- Submit Button -->
+  <div class="flex px-4 py-3 justify-center">
+    <button type="submit"
+      class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-5 bg-[#209cee] text-slate-50 text-base font-bold leading-normal tracking-[0.015em]">
+      <span class="truncate">Create Account</span>
+    </button>
+  </div>
+
+  <!-- Login Link -->
+  <p class="text-[#4c7b9a] text-sm font-normal leading-normal pb-3 pt-1 px-4 text-center">
+    Already have an account? 
+    <span class="underline cursor-pointer" (click)="navigateToLogin()">Log in</span>
+  </p>
+</form>

@@ -1,0 +1,93 @@
+<div class="relative flex size-full min-h-screen flex-col bg-slate-50 group/design-root overflow-x-hidden">
+  <div class="layout-container flex h-full grow flex-col">
+    <div class="px-40 flex flex-1 justify-center py-5">
+      <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+        <!-- Breadcrumbs -->
+        <div class="flex flex-wrap gap-2 p-4">
+          <a class="text-[#4c7b9a] text-base font-medium leading-normal" href="#">Cycles</a>
+          <span class="text-[#4c7b9a] text-base font-medium leading-normal">/</span>
+          <span class="text-[#0d161b] text-base font-medium leading-normal">All</span>
+        </div>
+
+        <p class="text-[#0d161b] text-base font-normal leading-normal pb-3 pt-1 px-4">
+          Explore our curated collection of cycles and gear, designed for every adventure. Find your perfect ride.
+        </p>
+
+        <!-- Filters Section -->
+        <h2 class="text-[#0d161b] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Refine Your Selection</h2>
+        <div class="@container">
+          <div class="relative flex w-full flex-col items-start justify-between gap-3 p-4 @[480px]:flex-row">
+            <p class="text-[#0d161b] text-base font-medium leading-normal w-full shrink-[3]">Price Range</p>
+            <div class="flex h-[38px] w-full pt-1.5">
+              <div class="flex h-1 w-full rounded-sm bg-[#cfdee7] pl-[60%] pr-[15%]">
+                <div class="relative">
+                  <div class="absolute -left-3 -top-1.5 flex flex-col items-center gap-1">
+                    <div class="size-4 rounded-full bg-[#209cee]"></div>
+                    <p class="text-[#0d161b] text-sm font-normal leading-normal">100</p>
+                  </div>
+                </div>
+                <div class="h-1 flex-1 rounded-sm bg-[#209cee]"></div>
+                <div class="relative">
+                  <div class="absolute -left-3 -top-1.5 flex flex-col items-center gap-1">
+                    <div class="size-4 rounded-full bg-[#209cee]"></div>
+                    <p class="text-[#0d161b] text-sm font-normal leading-normal">1000</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter Buttons -->
+        <div class="flex gap-3 p-3 flex-wrap pr-4">
+          <button class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-[#e7eef3] pl-4 pr-2">
+            <p class="text-[#0d161b] text-sm font-medium leading-normal">Brand</p>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
+              <path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"></path>
+            </svg>
+          </button>
+          <button class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-[#e7eef3] pl-4 pr-2">
+            <p class="text-[#0d161b] text-sm font-medium leading-normal">Type</p>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
+              <path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"></path>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Products Section -->
+        <h2 class="text-[#0d161b] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Discover</h2>
+        <div class="pb-3">
+          <div class="flex border-b border-[#cfdee7] px-4 gap-8">
+            <a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-[#4c7b9a] pb-[13px] pt-4" href="#">
+              <p class="text-[#4c7b9a] text-sm font-bold leading-normal tracking-[0.015em]">Sort by</p>
+            </a>
+            <a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-[#4c7b9a] pb-[13px] pt-4" href="#">
+              <p class="text-[#4c7b9a] text-sm font-bold leading-normal tracking-[0.015em]">Best Sellers</p>
+            </a>
+          </div>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-3 p-4">
+          <div class="flex flex-col gap-3 pb-3" *ngFor="let product of products">
+            <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
+                 [style.background-image]="'url(' + product.image + ')'">
+            </div>
+            <div class="flex flex-col gap-2">
+              <p class="text-[#0d161b] text-base font-medium leading-normal">{{ product.name }}</p>
+              <p class="text-[#4c7b9a] text-sm font-normal leading-normal">${{ product.price }}</p>
+              <button 
+                (click)="addToCart(product)"
+                class="flex items-center justify-center gap-2 bg-[#209cee] hover:bg-[#1a7fbf] text-white rounded-xl py-2 px-4 text-sm font-medium transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256">
+                  <path d="M222.14,58.87A8,8,0,0,0,216,56H54.68L49.79,29.14A16,16,0,0,0,34.05,16H16a8,8,0,0,0,0,16h18L59.56,172.29a24,24,0,0,0,5.33,11.27,28,28,0,1,0,44.4,8.44h45.42A27.75,27.75,0,0,0,152,204a28,28,0,1,0,28-28H83.17a8,8,0,0,1-7.87-6.57L72.13,152h116a24,24,0,0,0,23.61-19.71l12.16-66.86A8,8,0,0,0,222.14,58.87Z"/>
+                </svg>
+                Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

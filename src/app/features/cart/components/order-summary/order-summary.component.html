@@ -1,0 +1,38 @@
+<div class="bg-white rounded-lg shadow p-6">
+    <h2 class="text-xl font-bold mb-4">Order Summary</h2>
+    
+    <div class="space-y-3">
+        <div class="flex justify-between">
+            <span>Subtotal ({{ summary.subtotal | currency }})</span>
+            <span>{{ summary.subtotal | currency }}</span>
+        </div>
+
+        <div class="flex justify-between text-gray-600">
+            <span>Shipping</span>
+            <span>{{ summary.shipping === 0 ? 'Free' : (summary.shipping | currency) }}</span>
+        </div>
+
+        <div class="flex justify-between text-gray-600">
+            <span>Taxes</span>
+            <span>{{ summary.taxes === 0 ? 'To be determined' : (summary.taxes | currency) }}</span>
+        </div>
+
+        <div *ngIf="summary.discount" class="flex justify-between text-green-600">
+            <span>Discount</span>
+            <span>-{{ summary.discount | currency }}</span>
+        </div>
+
+        <div class="border-t pt-3 mt-3">
+            <div class="flex justify-between font-bold text-lg">
+                <span>Estimated total</span>
+                <span>{{ summary.total | currency }}</span>
+            </div>
+        </div>
+    </div>
+
+    <button 
+        (click)="proceedToCheckout()"
+        class="w-full mt-6 bg-blue-500 text-white py-3 px-4 rounded-lg hover:bg-blue-600 transition-colors">
+        Proceed to Checkout
+    </button>
+</div>
