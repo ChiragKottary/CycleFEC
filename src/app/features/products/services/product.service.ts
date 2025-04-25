@@ -1,16 +1,28 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { ProductFilter, PagedResponse } from '../models/product.model';
-import { ICycle } from '../../../app.model';
+import { ICycle, IBrand, ICycleType } from '../../../app.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
-  private apiUrl = 'https://localhost:7042/api/Cycle';
+  private apiUrl = 'https://localhost:7042/api';
 
   constructor(private http: HttpClient) {}
+
+  getBrands(): Observable<IBrand[]> {
+    return this.http.get<PagedResponse<IBrand>>(`${this.apiUrl}/Brand`).pipe(
+      map(response => response.items)
+    );
+  }
+
+  getCycleTypes(): Observable<ICycleType[]> {
+    return this.http.get<PagedResponse<ICycleType>>(`${this.apiUrl}/CycleType`).pipe(
+      map(response => response.items)
+    );
+  }
 
   getProducts(filter: ProductFilter): Observable<PagedResponse<ICycle>> {
     let params = new HttpParams();
@@ -32,6 +44,10 @@ export class ProductService {
       params = params.set('SortDirection', filter.sortDirection ?? 1);
     }
 
-    return this.http.get<PagedResponse<ICycle>>(this.apiUrl, { params });
+    return this.http.get<PagedResponse<ICycle>>(`${this.apiUrl}/Cycle`, { params });
+  }
+
+  getCycleById(id: string): Observable<ICycle> {
+    return this.http.get<ICycle>(`${this.apiUrl}/Cycle/${id}`);
   }
 }

@@ -8,6 +8,7 @@ export interface CartItemDisplay {
   imageUrl: string;
   brand?: string;
   cycleType?: string;
+  subtotal: number;
 }
 
 export interface OrderSummary {
@@ -16,4 +17,23 @@ export interface OrderSummary {
   taxes: number;
   discount?: number;
   total: number;
+}
+
+export interface ICartItemResponse {
+  cartItemId: string;
+  cartId: string;
+  cycleId: string;
+  cycleName: string;
+  cycleBrand: string;
+  cycleType: string;
+  cycleDescription: string;
+  cycleImage: string;
+  unitPrice: number;
+  quantity: number;
+  totalPrice: number;
+  subtotal: number;
+  addedAt: string;
+  updatedAt: string;
+  cart: ICart | null;
+  cycle: ICycle | null;
 }

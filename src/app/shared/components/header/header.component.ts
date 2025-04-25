@@ -15,7 +15,6 @@ import { AuthService } from '../../../features/auth/services/auth.service';
 export class HeaderComponent {
   cartItemCount$: Observable<number>;
   isAuthenticated$: Observable<boolean>;
-  categories: string[] = ['Mountain Bikes', 'Road Bikes', 'Electric Bikes', 'Accessories'];
 
   constructor(
     private cartService: CartService,

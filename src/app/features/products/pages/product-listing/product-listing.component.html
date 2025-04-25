@@ -1,4 +1,24 @@
 <div class="relative flex size-full min-h-screen flex-col bg-slate-50 group/design-root overflow-x-hidden">
+  <!-- Toast Notification -->
+  <div *ngIf="showToast" 
+       class="fixed top-4 right-4 z-50 p-4 rounded-xl shadow-lg"
+       [class.bg-green-100]="toastType === 'success'"
+       [class.bg-red-100]="toastType === 'error'">
+    <div class="flex items-center gap-2">
+      <svg *ngIf="toastType === 'success'" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+      </svg>
+      <svg *ngIf="toastType === 'error'" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-600" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+      </svg>
+      <span [class.text-green-700]="toastType === 'success'"
+            [class.text-red-700]="toastType === 'error'"
+            class="text-sm font-medium">
+        {{ toastMessage }}
+      </span>
+    </div>
+  </div>
+
   <div class="layout-container flex h-full grow flex-col">
     <div class="px-40 flex flex-1 justify-center py-5">
       <div class="layout-content-container flex flex-col max-w-[1200px] flex-1">
@@ -25,6 +45,39 @@
         <div class="bg-white rounded-xl shadow-sm p-6 mx-4 mb-6">
           <h2 class="text-[#0d161b] text-[22px] font-bold leading-tight tracking-[-0.015em] mb-6">Refine Your Selection</h2>
           
+          <!-- Brand and Category Filters -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <!-- Brand Filter -->
+            <div class="flex flex-col gap-2">
+              <label class="text-[#0d161b] text-base font-medium">Brand</label>
+              <select 
+                (change)="onBrandChange($any($event.target).value)"
+                [ngModel]="filter.brandId"
+                class="w-full px-3 py-2 border border-[#cfdee7] rounded-xl focus:outline-none focus:border-[#209cee] bg-white text-sm"
+              >
+                <option value="">All Brands</option>
+                <option *ngFor="let brand of brands" [value]="brand.brandId">
+                  {{ brand.brandName }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Category Filter -->
+            <div class="flex flex-col gap-2">
+              <label class="text-[#0d161b] text-base font-medium">Category</label>
+              <select 
+                (change)="onTypeChange($any($event.target).value)"
+                [ngModel]="filter.typeId"
+                class="w-full px-3 py-2 border border-[#cfdee7] rounded-xl focus:outline-none focus:border-[#209cee] bg-white text-sm"
+              >
+                <option value="">All Categories</option>
+                <option *ngFor="let type of cycleTypes" [value]="type.typeId">
+                  {{ type.typeName }}
+                </option>
+              </select>
+            </div>
+          </div>
+          
           <!-- Price Range Section -->
           <div class="flex flex-col gap-4">
             <div class="flex items-center justify-between">
@@ -32,35 +85,43 @@
               <div class="flex items-center gap-2">
                 <input 
                   type="number" 
+                  [min]="minPriceLimit"
+                  [max]="maxPriceLimit"
+                  [step]="priceStep"
                   [ngModel]="filter.minPrice" 
-                  (ngModelChange)="updatePriceRange($event, filter.maxPrice!)"
-                  class="w-20 px-2 py-1 border border-[#cfdee7] rounded-md text-sm"
+                  (ngModelChange)="updatePriceRange($event, null)"
+                  class="w-24 px-2 py-1 border border-[#cfdee7] rounded-md text-sm"
                 >
                 <span>-</span>
                 <input 
                   type="number" 
+                  [min]="minPriceLimit"
+                  [max]="maxPriceLimit"
+                  [step]="priceStep"
                   [ngModel]="filter.maxPrice" 
-                  (ngModelChange)="updatePriceRange(filter.minPrice!, $event)"
-                  class="w-20 px-2 py-1 border border-[#cfdee7] rounded-md text-sm"
+                  (ngModelChange)="updatePriceRange(null, $event)"
+                  class="w-24 px-2 py-1 border border-[#cfdee7] rounded-md text-sm"
                 >
               </div>
             </div>
             <div class="relative h-2 bg-[#cfdee7] rounded-full">
               <div class="absolute h-full bg-[#209cee] rounded-full"
-                   [style.left]="(filter.minPrice! - 100) / 1900 * 100 + '%'"
-                   [style.right]="(2000 - filter.maxPrice!) / 1900 * 100 + '%'">
+                   [style.left]="((filter.minPrice! - minPriceLimit) / (maxPriceLimit - minPriceLimit)) * 100 + '%'"
+                   [style.right]="((maxPriceLimit - filter.maxPrice!) / (maxPriceLimit - minPriceLimit)) * 100 + '%'">
               </div>
               <input type="range" 
-                     [min]="100" 
-                     [max]="2000" 
-                     [ngModel]="filter.minPrice" 
-                     (ngModelChange)="updatePriceRange($event, filter.maxPrice!)"
+                     [min]="minPriceLimit"
+                     [max]="maxPriceLimit"
+                     [step]="priceStep"
+                     [ngModel]="filter.minPrice"
+                     (ngModelChange)="updatePriceRange($event, null)"
                      class="absolute w-full h-full opacity-0 cursor-pointer">
               <input type="range" 
-                     [min]="100" 
-                     [max]="2000" 
+                     [min]="minPriceLimit"
+                     [max]="maxPriceLimit"
+                     [step]="priceStep"
                      [ngModel]="filter.maxPrice"
-                     (ngModelChange)="updatePriceRange(filter.minPrice!, $event)"
+                     (ngModelChange)="updatePriceRange(null, $event)"
                      class="absolute w-full h-full opacity-0 cursor-pointer">
             </div>
           </div>
@@ -139,22 +200,62 @@
 
         <!-- Product Grid -->
         <div *ngIf="!loading && !error" [class]="'grid gap-6 p-4 ' + getGridClass()">
-          <div class="flex flex-col gap-3 pb-3 bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow" *ngFor="let product of products">
-            <div class="w-full bg-center bg-no-repeat aspect-square bg-cover"
-                 [style.background-image]="'url(' + product.imageUrl + ')'">
-            </div>
-            <div class="flex flex-col gap-2 p-4">
-              <p class="text-[#0d161b] text-lg font-medium leading-normal">{{ product.modelName }}</p>
-              <div class="flex flex-col gap-1">
-                <p class="text-[#4c7b9a] text-base font-normal leading-normal">${{ product.price }}</p>
-                <p class="text-[#4c7b9a] text-sm">Stock: {{ product.stockQuantity }}</p>
-                <p class="text-[#4c7b9a] text-sm">{{ product.brand?.brandName }}</p>
-                <p class="text-[#4c7b9a] text-sm">{{ product.cycleType?.typeName }}</p>
+          <div class="group flex flex-col gap-3 pb-3 bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 max-w-[300px] justify-self-center w-full" *ngFor="let product of products">
+            <!-- Image Container with Hover Effect -->
+            <div class="relative overflow-hidden">
+              <div class="w-full bg-center bg-no-repeat aspect-square bg-cover transform group-hover:scale-105 transition-transform duration-300"
+                   [style.background-image]="'url(' + product.imageUrl + ')'">
               </div>
+              <!-- Quick View Overlay -->
+              <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <button (click)="openQuickView(product.cycleId)" 
+                        class="bg-white text-[#0d161b] px-4 py-2 rounded-lg font-medium transform -translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                  Quick View
+                </button>
+              </div>
+            </div>
+            
+            <div class="flex flex-col gap-2 p-4">
+              <div class="flex justify-between items-start">
+                <p class="text-[#0d161b] text-lg font-medium leading-normal line-clamp-2 flex-1">{{ product.modelName }}</p>
+                <p class="text-[#209cee] text-lg font-semibold whitespace-nowrap ml-2">${{ product.price | number:'1.2-2' }}</p>
+              </div>
+              
+              <div class="flex flex-col gap-1.5">
+                <!-- Stock Status with Color Indicator -->
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full" 
+                        [class.bg-green-500]="product.stockQuantity > 10"
+                        [class.bg-yellow-500]="product.stockQuantity <= 10 && product.stockQuantity > 0"
+                        [class.bg-red-500]="product.stockQuantity === 0">
+                  </span>
+                  <p class="text-[#4c7b9a] text-sm">
+                    {{ product.stockQuantity === 0 ? 'Out of Stock' : 
+                       product.stockQuantity <= 10 ? 'Low Stock: ' + product.stockQuantity + ' left' : 
+                       'In Stock: ' + product.stockQuantity }}
+                  </p>
+                </div>
+                
+                <!-- Brand and Type with Icons -->
+                <div class="flex items-center gap-2 text-[#4c7b9a] text-sm">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                  </svg>
+                  <span>{{ product.brand?.brandName }}</span>
+                </div>
+                <div class="flex items-center gap-2 text-[#4c7b9a] text-sm">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                  </svg>
+                  <span>{{ product.cycleType?.typeName }}</span>
+                </div>
+              </div>
+              
+              <!-- Add to Cart Button -->
               <button 
                 (click)="addToCart(product)"
                 [disabled]="product.stockQuantity === 0"
-                class="flex items-center justify-center gap-2 bg-[#209cee] hover:bg-[#1a7fbf] text-white rounded-xl py-2.5 px-4 text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                class="flex items-center justify-center gap-2 bg-[#209cee] hover:bg-[#1a7fbf] text-white rounded-xl py-2.5 px-4 text-sm font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed mt-2 hover:shadow-md">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256">
                   <path d="M222.14,58.87A8,8,0,0,0,216,56H54.68L49.79,29.14A16,16,0,0,0,34.05,16H16a8,8,0,0,0,0,16h18L59.56,172.29a24,24,0,0,0,5.33,11.27,28,28,0,1,0,44.4,8.44h45.42A27.75,27.75,0,0,0,152,204a28,28,0,1,0,28-28H83.17a8,8,0,0,1-7.87-6.57L72.13,152h116a24,24,0,0,0,23.61-19.71l12.16-66.86A8,8,0,0,0,222.14,58.87Z"/>
                 </svg>
@@ -198,7 +299,7 @@
             class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#e7eef3] transition-colors"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-              <path d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+              <path d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1 0-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
             </svg>
           </button>
           
@@ -210,4 +311,10 @@
       </div>
     </div>
   </div>
+  <app-quick-view 
+    [show]="showQuickView" 
+    [cycle]="selectedCycle"
+    (close)="closeQuickView()"
+    (notify)="showNotification($event.message, $event.type)">
+  </app-quick-view>
 </div>

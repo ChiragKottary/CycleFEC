@@ -1,0 +1,134 @@
+<!-- Modal Container -->
+<div *ngIf="show" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+  <div [@slideIn] class="relative bg-white rounded-xl max-w-3xl w-full mx-4 shadow-xl">
+    <!-- Close button -->
+    <button (click)="onClose()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+
+    <!-- Content --> 
+    <div class="flex flex-col md:flex-row gap-6 p-6" *ngIf="cycle">
+      <!-- Image Section -->
+      <div class="md:w-1/2">
+        <div class="relative">
+          <img [src]="cycle.imageUrl" [alt]="cycle.modelName" class="w-full h-auto rounded-lg object-cover shadow-md">
+          <!-- Stock Badge -->
+          <div class="absolute top-4 right-4">
+            <span class="px-3 py-1 rounded-full text-sm font-medium"
+                  [class.bg-green-100]="cycle.stockQuantity > 10"
+                  [class.text-green-800]="cycle.stockQuantity > 10"
+                  [class.bg-yellow-100]="cycle.stockQuantity <= 10 && cycle.stockQuantity > 0"
+                  [class.text-yellow-800]="cycle.stockQuantity <= 10 && cycle.stockQuantity > 0"
+                  [class.bg-red-100]="cycle.stockQuantity === 0"
+                  [class.text-red-800]="cycle.stockQuantity === 0">
+              {{ cycle.stockQuantity === 0 ? 'Out of Stock' : 
+                 cycle.stockQuantity <= 10 ? 'Low Stock' : 'In Stock' }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Details Section -->
+      <div class="md:w-1/2 flex flex-col gap-4">
+        <!-- Basic Info -->
+        <div class="flex flex-col gap-2">
+          <h2 class="text-2xl font-bold text-[#0d161b]">{{ cycle.modelName }}</h2>
+          <p class="text-3xl font-bold text-[#209cee]">${{ cycle.price | number:'1.2-2' }}</p>
+        </div>
+
+        <!-- Specifications -->
+        <div class="border-t border-b border-gray-200 py-4 space-y-4">
+          <!-- Brand and Type -->
+          <div class="grid grid-cols-2 gap-4">
+            <div class="flex items-center gap-2 text-[#4c7b9a]">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+              </svg>
+              <div class="flex flex-col">
+                <span class="text-sm text-gray-500">Brand</span>
+                <span class="font-medium">{{ cycle.brand?.brandName }}</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 text-[#4c7b9a]">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+              </svg>
+              <div class="flex flex-col">
+                <span class="text-sm text-gray-500">Category</span>
+                <span class="font-medium">{{ cycle.cycleType?.typeName }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Additional Details
+          <div class="space-y-2">
+            <h3 class="font-medium text-[#0d161b]">Specifications</h3>
+            <div class="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+              <div class="flex flex-col">
+                <span class="text-gray-500">Frame Material</span>
+                <span>{{ cycle.frameMaterial || 'Not specified' }}</span>
+              </div>
+              <div class="flex flex-col">
+                <span class="text-gray-500">Wheel Size</span>
+                <span>{{ cycle.wheelSize || 'Not specified' }}</span>
+              </div>
+              <div class="flex flex-col">
+                <span class="text-gray-500">Gear System</span>
+                <span>{{ cycle.gearSystem || 'Not specified' }}</span>
+              </div>
+              <div class="flex flex-col">
+                <span class="text-gray-500">Weight</span>
+                <span>{{ cycle.weight ? cycle.weight + ' kg' : 'Not specified' }}</span>
+              </div>
+              <div *ngIf="cycle.color" class="text-sm">
+                <span class="text-[#4c7b9a]">Color:</span>
+                <p class="font-medium text-[#0d161b]">{{ cycle.color }}</p>
+              </div>
+              <div class="flex items-center justify-between text-[#4c7b9a]">
+                <span>Product ID:</span>
+                <span>{{ cycle.cycleId }}</span>
+              </div>
+              <div class="flex items-center justify-between text-[#4c7b9a]" *ngIf="cycle.frameSize">
+                <span>Frame Size:</span>
+                <span>{{ cycle.frameSize }}</span>
+              </div>
+            </div>
+          </div> -->
+        </div>
+
+        <!-- Description -->
+        <div *ngIf="cycle.description" class="border-t border-gray-200 pt-4">
+          <h3 class="text-lg font-semibold text-[#0d161b] mb-2">Description</h3>
+          <p class="text-[#4c7b9a] text-sm leading-relaxed">{{ cycle.description }}</p>
+        </div>
+
+        <!-- Stock Status Detail -->
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full"
+                [class.bg-green-500]="cycle.stockQuantity > 10"
+                [class.bg-yellow-500]="cycle.stockQuantity <= 10 && cycle.stockQuantity > 0"
+                [class.bg-red-500]="cycle.stockQuantity === 0">
+          </span>
+          <p class="text-[#4c7b9a]">
+            {{ cycle.stockQuantity === 0 ? 'Out of Stock' : 
+               cycle.stockQuantity <= 10 ? 'Low Stock: ' + cycle.stockQuantity + ' left' : 
+               'In Stock: ' + cycle.stockQuantity + ' units available' }}
+          </p>
+        </div>
+
+        <!-- Add to Cart Button -->
+        <button 
+          (click)="addToCart(cycle)"
+          [disabled]="cycle.stockQuantity === 0"
+          class="mt-4 flex items-center justify-center gap-2 bg-[#209cee] hover:bg-[#1a7fbf] text-white rounded-xl py-3 px-6 font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256">
+            <path d="M222.14,58.87A8,8,0,0,0,216,56H54.68L49.79,29.14A16,16,0,0,0,34.05,16H16a8,8,0,0,0,0,16h18L59.56,172.29a24,24,0,0,0,5.33,11.27,28,28,0,1,0,44.4,8.44h45.42A27.75,27.75,0,0,0,152,204a28,28,0,1,0,28-28H83.17a8,8,0,0,1-7.87-6.57L72.13,152h116a24,24,0,0,0,23.61-19.71l12.16-66.86A8,8,0,0,0,222.14,58.87Z" />
+          </svg>
+          {{ cycle.stockQuantity === 0 ? 'Out of Stock' : 'Add to Cart' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

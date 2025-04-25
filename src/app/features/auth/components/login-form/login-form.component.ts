@@ -37,13 +37,24 @@ export class LoginFormComponent {
         },
         error: (error) => {
           this.isSubmitting = false;
-          this.errorMessage = error.error?.message || 'Login failed. Please check your credentials.';
+          this.errorMessage = error.message || 'Login failed. Please check your credentials.';
         }
       });
+    } else {
+      this.markFormGroupTouched(this.loginForm);
     }
   }
 
   navigateToRegister() {
     this.router.navigate(['/register']);
+  }
+
+  private markFormGroupTouched(formGroup: FormGroup) {
+    Object.values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      }
+    });
   }
 }
