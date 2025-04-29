@@ -1,8 +1,13 @@
 <!-- Registration Form -->
-<form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="w-full max-w-lg mx-auto p-6 bg-white rounded-xl shadow-sm">
-  <div class="flex flex-wrap -mx-3 mb-6">
+<form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="w-full mx-auto">
+  <div class="flex flex-wrap -mx-3 mb-4">
+    <div class="w-full px-3 mb-4">
+      <h3 class="text-[#209cee] font-medium mb-1">Personal Information</h3>
+      <p class="text-sm text-gray-500 mb-3">Tell us about yourself so we can personalize your cycling experience</p>
+    </div>
+    
     <!-- First Name -->
-    <div class="w-full md:w-1/2 px-3 mb-6">
+    <div class="w-full md:w-1/2 px-3 mb-4">
       <label class="block text-[#0d161b] text-sm font-medium mb-2" for="firstName">
         First Name
       </label>
@@ -10,12 +15,14 @@
         class="w-full px-3 py-2 border border-[#cfdee7] rounded-xl focus:outline-none focus:border-[#209cee]"
         id="firstName"
         type="text"
+        placeholder="John"
         formControlName="firstName"
         [class.border-red-500]="registrationForm.get('firstName')?.invalid && registrationForm.get('firstName')?.touched"
       >
     </div>
+    
     <!-- Last Name -->
-    <div class="w-full md:w-1/2 px-3 mb-6">
+    <div class="w-full md:w-1/2 px-3 mb-4">
       <label class="block text-[#0d161b] text-sm font-medium mb-2" for="lastName">
         Last Name
       </label>
@@ -23,38 +30,63 @@
         class="w-full px-3 py-2 border border-[#cfdee7] rounded-xl focus:outline-none focus:border-[#209cee]"
         id="lastName"
         type="text"
+        placeholder="Smith"
         formControlName="lastName"
         [class.border-red-500]="registrationForm.get('lastName')?.invalid && registrationForm.get('lastName')?.touched"
       >
     </div>
+    
     <!-- Email -->
-    <div class="w-full px-3 mb-6">
+    <div class="w-full md:w-1/2 px-3 mb-4">
       <label class="block text-[#0d161b] text-sm font-medium mb-2" for="email">
         Email
       </label>
-      <input 
-        class="w-full px-3 py-2 border border-[#cfdee7] rounded-xl focus:outline-none focus:border-[#209cee]"
-        id="email"
-        type="email"
-        formControlName="email"
-        [class.border-red-500]="registrationForm.get('email')?.invalid && registrationForm.get('email')?.touched"
-      >
+      <div class="relative">
+        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#4c7b9a" viewBox="0 0 16 16">
+            <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/>
+          </svg>
+        </div>
+        <input 
+          class="w-full px-3 py-2 pl-10 border border-[#cfdee7] rounded-xl focus:outline-none focus:border-[#209cee]"
+          id="email"
+          type="email"
+          placeholder="your.email@example.com"
+          formControlName="email"
+          [class.border-red-500]="registrationForm.get('email')?.invalid && registrationForm.get('email')?.touched"
+        >
+      </div>
     </div>
+    
     <!-- Phone -->
-    <div class="w-full px-3 mb-6">
+    <div class="w-full md:w-1/2 px-3 mb-4">
       <label class="block text-[#0d161b] text-sm font-medium mb-2" for="phone">
         Phone Number
       </label>
-      <input 
-        class="w-full px-3 py-2 border border-[#cfdee7] rounded-xl focus:outline-none focus:border-[#209cee]"
-        id="phone"
-        type="tel"
-        formControlName="phone"
-        [class.border-red-500]="registrationForm.get('phone')?.invalid && registrationForm.get('phone')?.touched"
-      >
+      <div class="relative">
+        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#4c7b9a" viewBox="0 0 16 16">
+            <path d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877z"/>
+          </svg>
+        </div>
+        <input 
+          class="w-full px-3 py-2 pl-10 border border-[#cfdee7] rounded-xl focus:outline-none focus:border-[#209cee]"
+          id="phone"
+          type="tel"
+          placeholder="(555) 123-4567"
+          formControlName="phone"
+          [class.border-red-500]="registrationForm.get('phone')?.invalid && registrationForm.get('phone')?.touched"
+        >
+      </div>
     </div>
+
+    <div class="w-full px-3 mb-4">
+      <h3 class="text-[#209cee] font-medium mb-1">Shipping Information</h3>
+      <p class="text-sm text-gray-500 mb-3">Where should we deliver your new cycle?</p>
+    </div>
+    
     <!-- Address -->
-    <div class="w-full px-3 mb-6">
+    <div class="w-full px-3 mb-4">
       <label class="block text-[#0d161b] text-sm font-medium mb-2" for="address">
         Address
       </label>
@@ -62,12 +94,14 @@
         class="w-full px-3 py-2 border border-[#cfdee7] rounded-xl focus:outline-none focus:border-[#209cee]"
         id="address"
         type="text"
+        placeholder="123 Main Street"
         formControlName="address"
         [class.border-red-500]="registrationForm.get('address')?.invalid && registrationForm.get('address')?.touched"
       >
     </div>
+    
     <!-- City -->
-    <div class="w-full md:w-1/3 px-3 mb-6">
+    <div class="w-full md:w-1/3 px-3 mb-4">
       <label class="block text-[#0d161b] text-sm font-medium mb-2" for="city">
         City
       </label>
@@ -75,25 +109,29 @@
         class="w-full px-3 py-2 border border-[#cfdee7] rounded-xl focus:outline-none focus:border-[#209cee]"
         id="city"
         type="text"
+        placeholder="New York"
         formControlName="city"
         [class.border-red-500]="registrationForm.get('city')?.invalid && registrationForm.get('city')?.touched"
       >
     </div>
+    
     <!-- State -->
-    <div class="w-full md:w-1/3 px-3 mb-6">
+    <div class="w-full md:w-1/3 px-3 mb-4">
       <label class="block text-[#0d161b] text-sm font-medium mb-2" for="state">
-        State
+        State/Province
       </label>
       <input 
         class="w-full px-3 py-2 border border-[#cfdee7] rounded-xl focus:outline-none focus:border-[#209cee]"
         id="state"
         type="text"
+        placeholder="NY"
         formControlName="state"
         [class.border-red-500]="registrationForm.get('state')?.invalid && registrationForm.get('state')?.touched"
       >
     </div>
+    
     <!-- Postal Code -->
-    <div class="w-full md:w-1/3 px-3 mb-6">
+    <div class="w-full md:w-1/3 px-3 mb-4">
       <label class="block text-[#0d161b] text-sm font-medium mb-2" for="postalCode">
         Postal Code
       </label>
@@ -101,39 +139,91 @@
         class="w-full px-3 py-2 border border-[#cfdee7] rounded-xl focus:outline-none focus:border-[#209cee]"
         id="postalCode"
         type="text"
+        placeholder="10001"
         formControlName="postalCode"
         [class.border-red-500]="registrationForm.get('postalCode')?.invalid && registrationForm.get('postalCode')?.touched"
       >
     </div>
+    
+    <div class="w-full px-3 mb-4">
+      <h3 class="text-[#209cee] font-medium mb-1">Account Security</h3>
+      <p class="text-sm text-gray-500 mb-3">Create a secure password for your cycling account</p>
+    </div>
+    
     <!-- Password -->
-    <div class="w-full px-3 mb-6">
+    <div class="w-full px-3 mb-4">
       <label class="block text-[#0d161b] text-sm font-medium mb-2" for="password">
         Password
       </label>
-      <input 
-        class="w-full px-3 py-2 border border-[#cfdee7] rounded-xl focus:outline-none focus:border-[#209cee]"
-        id="password"
-        type="password"
-        formControlName="password"
-        [class.border-red-500]="registrationForm.get('password')?.invalid && registrationForm.get('password')?.touched"
-      >
+      <div class="relative">
+        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#4c7b9a" viewBox="0 0 16 16">
+            <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2"/>
+          </svg>
+        </div>
+        <input 
+          class="w-full px-3 py-2 pl-10 pr-10 border border-[#cfdee7] rounded-xl focus:outline-none focus:border-[#209cee]"
+          id="password"
+          [type]="showPassword ? 'text' : 'password'"
+          placeholder="••••••••"
+          formControlName="password"
+          [class.border-red-500]="registrationForm.get('password')?.invalid && registrationForm.get('password')?.touched"
+        >
+        <div class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer" (click)="togglePasswordVisibility()">
+          <svg *ngIf="!showPassword" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#4c7b9a" viewBox="0 0 16 16">
+            <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+            <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+          </svg>
+          <svg *ngIf="showPassword" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#4c7b9a" viewBox="0 0 16 16">
+            <path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7.028 7.028 0 0 0-2.79.588l.77.771A5.944 5.944 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.134 13.134 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755-.165.165-.337.328-.517.486l.708.709z"/>
+            <path d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829l.822.822zm-2.943 1.299.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829z"/>
+            <path d="M3.35 5.47c-.18.16-.353.322-.518.487A13.134 13.134 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7.029 7.029 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709zm10.296 8.884-12-12 .708-.708 12 12-.708.708z"/>
+          </svg>
+        </div>
+      </div>
+      <p class="text-xs text-gray-500 mt-1">Password must be at least 8 characters long</p>
     </div>
+    
     <!-- Terms Acceptance -->
-    <div class="w-full px-3 mb-6">
+    <div class="w-full px-3 mb-4">
       <label class="flex items-center">
         <input 
           type="checkbox" 
           formControlName="termsAccepted"
           class="form-checkbox h-4 w-4 text-[#209cee] border-[#cfdee7] rounded focus:ring-[#209cee]"
         >
-        <span class="ml-2 text-sm text-[#0d161b]">I accept the terms and conditions</span>
+        <span class="ml-2 text-sm text-[#0d161b]">I accept the <span class="text-[#209cee]">Terms and Conditions</span> and <span class="text-[#209cee]">Privacy Policy</span></span>
       </label>
     </div>
   </div>
 
+  <!-- Cycling Preferences (Optional but adds to the theme) -->
+  <div class="bg-[#e7eef3] rounded-xl p-4 mb-6">
+    <h3 class="text-[#0d161b] font-medium mb-2">Your Cycling Preferences</h3>
+    <p class="text-sm text-[#4c7b9a] mb-3">Help us recommend the right cycles for you (optional)</p>
+    
+    <div class="flex flex-wrap gap-2">
+      <span class="bg-white px-3 py-1 rounded-full text-sm text-[#4c7b9a] border border-[#cfdee7] cursor-pointer hover:bg-[#209cee] hover:text-white hover:border-[#209cee] transition-colors">
+        Road Cycling
+      </span>
+      <span class="bg-white px-3 py-1 rounded-full text-sm text-[#4c7b9a] border border-[#cfdee7] cursor-pointer hover:bg-[#209cee] hover:text-white hover:border-[#209cee] transition-colors">
+        Mountain Biking
+      </span>
+      <span class="bg-white px-3 py-1 rounded-full text-sm text-[#4c7b9a] border border-[#cfdee7] cursor-pointer hover:bg-[#209cee] hover:text-white hover:border-[#209cee] transition-colors">
+        Urban Commuting
+      </span>
+      <span class="bg-white px-3 py-1 rounded-full text-sm text-[#4c7b9a] border border-[#cfdee7] cursor-pointer hover:bg-[#209cee] hover:text-white hover:border-[#209cee] transition-colors">
+        Electric Assist
+      </span>
+      <span class="bg-white px-3 py-1 rounded-full text-sm text-[#4c7b9a] border border-[#cfdee7] cursor-pointer hover:bg-[#209cee] hover:text-white hover:border-[#209cee] transition-colors">
+        Touring
+      </span>
+    </div>
+  </div>
+
   <!-- Error Message -->
-  <div *ngIf="errorMessage" class="px-3 mb-6">
-    <p class="text-red-500 text-sm">{{ errorMessage }}</p>
+  <div *ngIf="errorMessage" class="px-3 mb-6 p-3 bg-red-50 border border-red-200 text-red-800 rounded-lg">
+    <p class="text-sm">{{ errorMessage }}</p>
   </div>
 
   <!-- Submit Button -->
@@ -141,20 +231,20 @@
     <button 
       type="submit" 
       [disabled]="registrationForm.invalid || isSubmitting"
-      class="bg-[#209cee] hover:bg-[#1a7fbf] text-white font-medium py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center min-w-32"
+      class="bg-[#209cee] hover:bg-[#1a7fbf] text-white font-medium py-3 px-6 rounded-xl focus:outline-none focus:shadow-outline disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center min-w-40 transition-colors"
     >
       <svg *ngIf="isSubmitting" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
       </svg>
-      {{ isSubmitting ? 'Registering...' : 'Register' }}
+      {{ isSubmitting ? 'Creating Your Account...' : 'Join the Cycling Community' }}
     </button>
     <button 
       type="button" 
       (click)="navigateToLogin()"
-      class="text-[#4c7b9a] hover:text-[#0d161b] font-medium"
+      class="text-[#4c7b9a] hover:text-[#209cee] font-medium transition-colors"
     >
-      Already have an account?
+      Already a rider?
     </button>
   </div>
 </form>

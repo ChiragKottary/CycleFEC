@@ -97,8 +97,63 @@ export class CartService {
 
     const cartId = this.currentCartId.value;
     if (!cartId) {
-      this.loadCustomerCart();
-      return { success: false, message: 'Loading cart details, please try again' };
+      // Create a new cart first, then add the item
+      const customerId = this.authService.getCurrentUserId();
+      
+      // Create a temporary cart item for optimistic UI update
+      const tempItem: CartItemDisplay = {
+        id: `temp_${cycle.cycleId}`,
+        name: cycle.modelName,
+        price: cycle.price,
+        quantity: 1,
+        imageUrl: cycle.imageUrl,
+        brand: cycle.brand?.brandName,
+        cycleType: cycle.cycleType?.typeName,
+        subtotal: cycle.price
+      };
+      
+      // Optimistically update UI with temporary item
+      this.updateCartState([...currentItems, tempItem]);
+      
+      // Create cart and then add item to it
+      this.http.post<{cartId: string}>(`${this.apiUrl}/Customers/${customerId}/cart`, {}).pipe(
+        tap(response => {
+          if (response && response.cartId) {
+            // Update current cart ID
+            this.currentCartId.next(response.cartId);
+            
+            // Now add the item to the newly created cart
+            const payload = {
+              cycleId: cycle.cycleId,
+              quantity: 1,
+              unitPrice: cycle.price
+            };
+            
+            this.http.post<ICartItemResponse>(`${this.apiUrl}/Cart/${response.cartId}/items`, payload).pipe(
+              tap(newItem => {
+                if (newItem) {
+                  // Load the full cart to ensure everything is in sync
+                  this.loadCustomerCart();
+                }
+              }),
+              catchError(error => {
+                console.error('Error adding item to new cart:', error);
+                this.loadCustomerCart(); // Reload cart state
+                return of(null);
+              })
+            ).subscribe();
+          }
+        }),
+        catchError(error => {
+          console.error('Error creating new cart:', error);
+          // Remove optimistic update
+          const updatedItems = currentItems.filter(item => item.id !== `temp_${cycle.cycleId}`);
+          this.updateCartState(updatedItems);
+          return of(null);
+        })
+      ).subscribe();
+      
+      return { success: true, message: 'Creating cart and adding item...' };
     }
 
     const payload = {
@@ -115,23 +170,26 @@ export class CartService {
           : item
       );
       this.updateCartState(updatedItems);
+    } else {
+      // Add a temporary item for optimistic UI update
+      const tempItem: CartItemDisplay = {
+        id: `temp_${cycle.cycleId}`,
+        name: cycle.modelName,
+        price: cycle.price,
+        quantity: 1,
+        imageUrl: cycle.imageUrl,
+        brand: cycle.brand?.brandName,
+        cycleType: cycle.cycleType?.typeName,
+        subtotal: cycle.price
+      };
+      this.updateCartState([...currentItems, tempItem]);
     }
 
     this.http.post<ICartItemResponse>(`${this.apiUrl}/Cart/${cartId}/items`, payload).pipe(
       tap(newItem => {
         if (newItem) {
-          const currentItems = this.cartItems.value;
-          const existingItemIndex = currentItems.findIndex(i => i.id === newItem.cartItemId);
-          
-          let updatedItems;
-          if (existingItemIndex >= 0) {
-            updatedItems = [...currentItems];
-            updatedItems[existingItemIndex] = this.mapToCartItemDisplay(newItem);
-          } else {
-            updatedItems = [...currentItems, this.mapToCartItemDisplay(newItem)];
-          }
-          
-          this.updateCartState(updatedItems);
+          // Instead of manual update, reload the cart to ensure it's in sync
+          this.loadCustomerCart();
         }
       }),
       catchError(error => {
@@ -176,10 +234,8 @@ export class CartService {
     this.http.put<ICartItemResponse>(`${this.apiUrl}/Cart/items/${itemId}`, { quantity }).pipe(
       tap(updatedItem => {
         if (updatedItem) {
-          const items = this.cartItems.value.map(item => 
-            item.id === itemId ? this.mapToCartItemDisplay(updatedItem) : item
-          );
-          this.updateCartState(items);
+          // Instead of manual update, reload the entire cart to ensure it's in sync
+          this.loadCustomerCart();
         }
       }),
       catchError(error => {
@@ -201,6 +257,10 @@ export class CartService {
     this.updateCartState(updatedItems);
 
     this.http.delete(`${this.apiUrl}/Cart/items/${itemId}`).pipe(
+      tap(() => {
+        // Reload the cart after item removal
+        this.loadCustomerCart();
+      }),
       catchError(error => {
         console.error('Error removing item from cart:', error);
         // Revert optimistic update

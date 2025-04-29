@@ -14,39 +14,54 @@ export class LoginFormComponent {
   loginForm: FormGroup;
   isSubmitting = false;
   errorMessage = '';
+  showPassword = false;
 
   constructor(
     private fb: FormBuilder,
-    private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required]]
+      password: ['', Validators.required]
     });
   }
 
-  onSubmit() {
-    if (this.loginForm.valid) {
-      this.isSubmitting = true;
-      this.errorMessage = '';
-
-      this.authService.login(this.loginForm.value).subscribe({
-        next: () => {
-          this.router.navigate(['/products']);
-        },
-        error: (error) => {
-          this.isSubmitting = false;
-          this.errorMessage = error.message || 'Login failed. Please check your credentials.';
-        }
-      });
-    } else {
+  onSubmit(): void {
+    if (this.loginForm.invalid) {
       this.markFormGroupTouched(this.loginForm);
+      return;
     }
+
+    this.isSubmitting = true;
+    this.errorMessage = '';
+
+    const { email, password } = this.loginForm.value;
+    
+    this.authService.login({email, password}).subscribe({
+      next: (response) => {
+        this.isSubmitting = false;
+        if (response.token) { // Assuming 'token' exists on LoginResponse
+          this.router.navigate(['/']);
+        } else {
+          // Using a safe approach since message might not exist on LoginResponse
+          this.errorMessage = 'Login failed. Please check your credentials and try again.';
+        }
+      },
+      error: (error) => {
+        this.isSubmitting = false;
+        this.errorMessage = 'An unexpected error occurred. Please try again later.';
+        console.error('Login error:', error);
+      }
+    });
   }
 
-  navigateToRegister() {
+  navigateToRegister(): void {
     this.router.navigate(['/register']);
+  }
+
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
   }
 
   private markFormGroupTouched(formGroup: FormGroup) {

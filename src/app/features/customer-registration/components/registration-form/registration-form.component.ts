@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CustomerService } from '../../services/customer.service';
 
 @Component({
   selector: 'app-registration-form',
   templateUrl: './registration-form.component.html',
-  styleUrl: './registration-form.component.scss',
+  styleUrls: ['./registration-form.component.scss'],
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule]
 })
@@ -15,11 +15,12 @@ export class RegistrationFormComponent {
   registrationForm: FormGroup;
   isSubmitting = false;
   errorMessage = '';
+  showPassword = false;
 
   constructor(
-    private fb: FormBuilder, 
-    private router: Router,
-    private customerService: CustomerService
+    private fb: FormBuilder,
+    private customerService: CustomerService,
+    private router: Router
   ) {
     this.registrationForm = this.fb.group({
       firstName: ['', [Validators.required]],
@@ -35,29 +36,51 @@ export class RegistrationFormComponent {
     });
   }
 
-  onSubmit() {
-    if (this.registrationForm.valid) {
-      this.isSubmitting = true;
-      this.errorMessage = '';
-      
-      const formValue = this.registrationForm.value;
-      // Remove termsAccepted as it's not needed in the API
-      const { termsAccepted, ...customerData } = formValue;
-
-      this.customerService.registerCustomer(customerData).subscribe({
-        next: () => {
-          // Registration successful
-          this.router.navigate(['/login']);
-        },
-        error: (error) => {
-          this.isSubmitting = false;
-          this.errorMessage = error.error?.message || 'Registration failed. Please try again.';
-        }
-      });
+  onSubmit(): void {
+    if (this.registrationForm.invalid) {
+      this.markFormGroupTouched(this.registrationForm);
+      return;
     }
+
+    this.isSubmitting = true;
+    this.errorMessage = '';
+
+    const formData = this.registrationForm.value;
+    
+    this.customerService.registerCustomer(formData).subscribe({
+      next: (response) => {
+        this.isSubmitting = false;
+        if (response.success) {
+          this.router.navigate(['/login'], { 
+            queryParams: { registered: 'true' } 
+          });
+        } else {
+          this.errorMessage = response.message || 'Registration failed. Please try again.';
+        }
+      },
+      error: (error) => {
+        this.isSubmitting = false;
+        this.errorMessage = error?.error?.message || 'An unexpected error occurred. Please try again later.';
+        console.error('Registration error:', error);
+      }
+    });
   }
 
-  navigateToLogin() {
+  navigateToLogin(): void {
     this.router.navigate(['/login']);
+  }
+
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
+  }
+
+  private markFormGroupTouched(formGroup: FormGroup) {
+    Object.values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+      
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      }
+    });
   }
 }

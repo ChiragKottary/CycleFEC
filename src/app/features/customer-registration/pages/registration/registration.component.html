@@ -1,9 +1,35 @@
 <div class="relative flex size-full min-h-screen flex-col bg-slate-50 group/design-root overflow-x-hidden">
   <div class="layout-container flex h-full grow flex-col">
     <!-- Content -->
-    <div class="px-40 flex flex-1 justify-center py-5">
+    <div class="px-4 md:px-40 flex flex-1 justify-center py-5">
       <div class="layout-content-container flex flex-col w-[512px] max-w-[512px] py-5 max-w-[960px] flex-1">
-        <app-registration-form></app-registration-form>
+        <div class="text-center mb-6">
+          <h1 class="text-3xl font-bold text-[#209cee] mb-2">Join the CycleSphere Community</h1>
+          <p class="text-[#4c7b9a]">Create an account to begin your cycling adventure</p>
+        </div>
+        
+        <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+          <div class="flex items-center justify-center mb-6 gap-4">
+            <div class="h-16 w-16 bg-[#e7eef3] rounded-full flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#209cee" viewBox="0 0 16 16">
+                <path d="M4 4.5a.5.5 0 0 1 .5-.5H6a.5.5 0 0 1 0 1v.5h4.14l.386-1.158A.5.5 0 0 1 11 4h1a.5.5 0 0 1 0 1h-.64l-.311.935.807 1.29a3 3 0 1 1-.848.53l-.508-.812-2.076 3.322A.5.5 0 0 1 8 10.5H5.959a3 3 0 1 1-1.815-3.274L5 5.856V5h-.5a.5.5 0 0 1-.5-.5zm1.5 2.443-.508.814c.5.444.85 1.054.967 1.743h1.139L5.5 6.943zM8 9.057 9.598 6.5H6.402L8 9.057zM4.937 9.5a1.997 1.997 0 0 0-.487-.877l-.548.877h1.035zM3.603 8.092A2 2 0 1 0 4.937 10.5H3a.5.5 0 0 1-.424-.765l1.027-1.643zm7.947.53a2 2 0 1 0 .848-.53l1.026 1.643a.5.5 0 1 1-.848.53L11.55 8.623z"/>
+              </svg>
+            </div>
+            <h2 class="text-2xl font-bold text-[#0d161b]">Rider Registration</h2>
+          </div>
+          <app-registration-form></app-registration-form>
+        </div>
+        
+        <div class="text-center text-sm text-[#4c7b9a] space-y-2">
+          <p>Join thousands of cyclists who have found their perfect ride!</p>
+          <p>Register today and get exclusive access to:</p>
+          <ul class="flex flex-wrap justify-center gap-2 mt-2">
+            <li class="bg-[#e7eef3] px-3 py-1 rounded-full text-[#209cee]">Premium Cycles</li>
+            <li class="bg-[#e7eef3] px-3 py-1 rounded-full text-[#209cee]">Special Offers</li>
+            <li class="bg-[#e7eef3] px-3 py-1 rounded-full text-[#209cee]">Maintenance Tips</li>
+            <li class="bg-[#e7eef3] px-3 py-1 rounded-full text-[#209cee]">Cycling Events</li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
